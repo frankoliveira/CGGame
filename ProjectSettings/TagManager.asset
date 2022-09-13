@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Spikes
   - Enemy2Legs
+  - Gear
   layers:
   - Default
   - TransparentFX

@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     private CharacterController controller;
     private Animator animator;
+    public TMPro.TextMeshProUGUI scoreText;
 
     public float speed;
     public float gravity;
@@ -14,7 +15,8 @@ public class Player : MonoBehaviour
     public float jumpHeight;
     public float YRightRotation;
     public float YLeftRotation;
-
+    
+    private int score;
     private float rotation;
     private Vector3 moveDirection;
 
@@ -44,6 +46,11 @@ public class Player : MonoBehaviour
             animator.SetInteger("transition", 2);
             Destroy(gameObject);
         }
+        if (collision.gameObject.CompareTag("Gear"))
+        {
+            score++;
+            scoreText.text = score.ToString();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -58,6 +65,12 @@ public class Player : MonoBehaviour
         {
             animator.SetInteger("transition", 3);
             Destroy(gameObject);
+        }
+
+        if (other.gameObject.CompareTag("Gear"))
+        {
+            score++;
+            scoreText.text = score.ToString();
         }
     }
 
