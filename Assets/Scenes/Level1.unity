@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.3131399, g: 0.29382023, b: 0.5141649, a: 1}
+  m_IndirectSpecularColor: {r: 0.31307304, g: 0.29374075, b: 0.51409763, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -11240,9 +11240,9 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: fa48fd069663c416c8ae40edb1dbe116, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -11339,7 +11339,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSourceMusicaDeFundo: {fileID: 0}
-  musicasDeFundo: {fileID: 8300000, guid: fa48fd069663c416c8ae40edb1dbe116, type: 3}
+  musicasDeFundo:
+  - {fileID: 8300000, guid: fa48fd069663c416c8ae40edb1dbe116, type: 3}
+  - {fileID: 8300000, guid: 958c57dce2a3f4cedb0ab1a36911ce3b, type: 3}
+  - {fileID: 8300000, guid: 1ae847d12475e4edda0d643b7e23f153, type: 3}
+  menuMode: 0
+  playingMode: 1
 --- !u!4 &829336939
 Transform:
   m_ObjectHideFlags: 0
@@ -12979,7 +12984,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 13.29, y: 5.77, z: -30.7}
+  m_LocalPosition: {x: 13.3, y: 5.77, z: -25.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -27649,6 +27654,10 @@ PrefabInstance:
     - target: {fileID: 6954257929472155339, guid: c426ead6e1901c14192f3e4f0ee9612b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7424401417357918417, guid: c426ead6e1901c14192f3e4f0ee9612b, type: 3}
+      propertyPath: speed
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7424401417357918417, guid: c426ead6e1901c14192f3e4f0ee9612b, type: 3}
       propertyPath: scoreText

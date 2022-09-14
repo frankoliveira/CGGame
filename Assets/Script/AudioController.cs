@@ -5,21 +5,31 @@ using UnityEngine;
 public class AudioController : MonoBehaviour
 {
     public AudioSource audioSourceMusicaDeFundo;
-    public AudioClip musicasDeFundo;
+    public AudioClip [] musicasDeFundo;
+    public bool menuMode = true;
+    public bool playingMode = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        audioSourceMusicaDeFundo = GetComponent<AudioSource>();
-        AudioClip musicaDeFundoDessaFase = musicasDeFundo;
-        audioSourceMusicaDeFundo.clip = musicaDeFundoDessaFase;
-        audioSourceMusicaDeFundo.loop = true;
-        audioSourceMusicaDeFundo.Play();
-    }
+        Debug.Log("Audio Controller:");
+        Debug.Log("Menu:" + menuMode);
+        Debug.Log("Playing:" + playingMode);
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        if (playingMode)
+        {
+            audioSourceMusicaDeFundo = GetComponent<AudioSource>();
+            AudioClip musicaDeFundoDessaFase = musicasDeFundo[0];
+            audioSourceMusicaDeFundo.clip = musicaDeFundoDessaFase;
+            audioSourceMusicaDeFundo.loop = true;
+            audioSourceMusicaDeFundo.Play();
+        }
+        else if (menuMode)
+        {
+            AudioClip musicaDeFundoDessaFase = musicasDeFundo[1];
+            audioSourceMusicaDeFundo.clip = musicaDeFundoDessaFase;
+            audioSourceMusicaDeFundo.loop = true;
+            audioSourceMusicaDeFundo.Play();
+        }
     }
 }
