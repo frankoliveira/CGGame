@@ -1,75 +1,86 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Enemy2Legs : MonoBehaviour
 {
-    private CharacterController controller;
-    private Animator animator;
-
-    public float speed;
+    //Enemy properties
+    private CharacterController _controller;
+    private Animator _animator;
+    public float moveSpeed;
     public float gravity;
-    private float rotation = -90;
+    public float originalRotation = 90f;
+    public float inverseRotation = -90;
     public float rightWalkDistance;
     public float lefttWalkDistance;
     public bool directionRight = true;
+    private float _xPositionPlayer;
+    private float _leftLimiteX;
+    private float _rightLimiteX;
+    private Vector3 _moveDirection;
 
-    private float xPositionPlayer;
-    private float originalOrientation = 90f;
-    private float originalZPosition;
-    private float leftLimiteX;
-    private float rightLimiteX;
-    private Vector3 moveDiection;
-
-
+    //Shooting properties
+    private Transform _playerTransform;
+    private GunEnemy2LegsController _currentGun;
+    private float _fireRate;
+    private float _fireRateDelta = 0f;
+    [SerializeField] float _playerRange = 13.0f;
     
-    // Start is called before the first frame update
     void Start()
     {
-        controller = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
-        var rb = GetComponent<Rigidbody>();
-        leftLimiteX = controller.transform.position.x - lefttWalkDistance;
-        rightLimiteX = controller.transform.position.x + rightWalkDistance;
-        originalZPosition = controller.transform.position.z;
+        _controller = GetComponent<CharacterController>();
+        _animator = GetComponent<Animator>();
+        _leftLimiteX = _controller.transform.position.x - lefttWalkDistance;
+        _rightLimiteX = _controller.transform.position.x + rightWalkDistance;
+        _playerTransform = FindObjectOfType<Player>().transform;
+        _currentGun = GetComponentInChildren<GunEnemy2LegsController>();
+        _fireRate = _currentGun.getRateOfFire();
     }
 
-    // Update is called once per frame
     void Update()
     {
         Move();
+        Vector3 playerGroundPos = new Vector3(_playerTransform.position.x, transform.position.y, _playerTransform.position.z);
+        _fireRateDelta -= Time.deltaTime;
+
+        if(_fireRateDelta < 0)
+        {
+            if (Vector3.Distance(transform.position, playerGroundPos) < _playerRange)
+            {
+                _currentGun.Shoot();
+                _fireRateDelta = _fireRate;
+            }
+        }
     }
 
     void Move()
     {
         if(directionRight)
         {
-            transform.eulerAngles = new Vector3(0, originalOrientation, 0);
-            moveDiection = Vector3.right * speed;
+            transform.eulerAngles = new Vector3(0, originalRotation, 0);
+            _moveDirection = Vector3.right * moveSpeed;
         }
         else
         {
-            transform.eulerAngles = new Vector3(0, rotation, 0);
-            moveDiection = Vector3.left * speed;
+            transform.eulerAngles = new Vector3(0, inverseRotation, 0);
+            _moveDirection = Vector3.left * moveSpeed;
             
         }
 
-        xPositionPlayer = controller.transform.position.x;
+        _xPositionPlayer = _controller.transform.position.x;
 
-        if (xPositionPlayer >= rightLimiteX)
+        if (_xPositionPlayer >= _rightLimiteX)
         {
             directionRight = false;
         }
-        else if (xPositionPlayer <= leftLimiteX)
+        else if (_xPositionPlayer <= _leftLimiteX)
         {
             directionRight = true;
         }
 
-        if (controller.transform.position.y > 0)
+        if (_controller.transform.position.y > 0)
         {
-            moveDiection.y -= gravity * Time.deltaTime;
+            _moveDirection.y -= gravity * Time.deltaTime;
         }
 
-        controller.Move(moveDiection * Time.deltaTime);
+        _controller.Move(_moveDirection * Time.deltaTime);
     }
 }

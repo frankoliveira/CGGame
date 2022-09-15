@@ -9,16 +9,12 @@ public class AudioController : MonoBehaviour
     public bool menuMode = true;
     public bool playingMode = false;
 
-    // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Audio Controller:");
-        Debug.Log("Menu:" + menuMode);
-        Debug.Log("Playing:" + playingMode);
+        audioSourceMusicaDeFundo = GetComponent<AudioSource>();
 
         if (playingMode)
         {
-            audioSourceMusicaDeFundo = GetComponent<AudioSource>();
             AudioClip musicaDeFundoDessaFase = musicasDeFundo[0];
             audioSourceMusicaDeFundo.clip = musicaDeFundoDessaFase;
             audioSourceMusicaDeFundo.loop = true;
@@ -26,7 +22,7 @@ public class AudioController : MonoBehaviour
         }
         else if (menuMode)
         {
-            AudioClip musicaDeFundoDessaFase = musicasDeFundo[1];
+            AudioClip musicaDeFundoDessaFase = musicasDeFundo[2];
             audioSourceMusicaDeFundo.clip = musicaDeFundoDessaFase;
             audioSourceMusicaDeFundo.loop = true;
             audioSourceMusicaDeFundo.Play();
