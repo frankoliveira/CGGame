@@ -67,11 +67,18 @@ public class Player : MonoBehaviour
             Destroy(gameObject);
         }
 
+        if (other.gameObject.CompareTag("Spikes"))
+        {
+            animator.SetInteger("transition", 3);
+            Destroy(gameObject);
+        }
+
         if (other.gameObject.CompareTag("Gear"))
         {
             score++;
             scoreText.text = score.ToString();
         }
+
     }
 
     void Move()

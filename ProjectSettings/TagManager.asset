@@ -7,6 +7,7 @@ TagManager:
   - Spikes
   - Enemy2Legs
   - Gear
+  - Projectile1
   layers:
   - Default
   - TransparentFX
