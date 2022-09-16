@@ -57,7 +57,6 @@ public class Player : MonoBehaviour
         acho q n é assim q pegamos o y atual */
     }
 
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Spikes"))
@@ -104,7 +103,6 @@ public class Player : MonoBehaviour
             score++;
             scoreText.text = score.ToString();
         }
-
     }
 
     void Move()
