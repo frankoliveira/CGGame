@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     private float rotation;
     private Vector3 moveDirection;
 
-    public int _vidas = 3;
+    public int _lives = 3;
     [SerializeField] private MenuGameOverController _menuGameOverController;
 
     // Start is called before the first frame update
@@ -30,14 +30,6 @@ public class Player : MonoBehaviour
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         animator.SetInteger("transition", 0);
-        if(_menuGameOverController != null)
-        {
-            Debug.Log("menu game ok");
-        }
-        else
-        {
-            Debug.Log("menu game é null");
-        }
     }
 
     // Update is called once per frame
@@ -45,10 +37,11 @@ public class Player : MonoBehaviour
     {
         Move();
         
-        if (_vidas == 0)
+        if (_lives == 0)
         {
-            _menuGameOverController.Setup(score, _vidas);
-            _vidas = -1;
+            Destroy(gameObject);
+            _menuGameOverController.Setup(score, _lives);
+            //_vidas = -1;
         }
         
         //Debug.Log(controller.height);
@@ -57,6 +50,7 @@ public class Player : MonoBehaviour
         acho q n é assim q pegamos o y atual */
     }
 
+    /*
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Spikes"))
@@ -77,31 +71,31 @@ public class Player : MonoBehaviour
             scoreText.text = score.ToString();
         }
     }
+    */
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Spikes"))
         {
             animator.SetInteger("transition", 3);
-            //Destroy(gameObject);
-            _vidas -= 1;
+            UpdatePlayerLives(-1);
+            //_lives -= 1;
             Debug.Log("Colisão com spikes. Vidas - 1");
-            lifeText.text = _vidas.ToString();
+            lifeText.text = _lives.ToString();
         }
 
         if (other.gameObject.CompareTag("Enemy2Legs"))
         {
             animator.SetInteger("transition", 3);
-            //Destroy(gameObject);
+            UpdatePlayerLives(-1);
+            //_lives -= 1;
             Debug.Log("Colisão com Enemy2Legs. Vidas - 1");
-            _vidas -= 1;
-            lifeText.text = _vidas.ToString();
+            lifeText.text = _lives.ToString();
         }
 
         if (other.gameObject.CompareTag("Gear"))
         {
-            score++;
-            scoreText.text = score.ToString();
+            UpdatePlayerScore(1);
         }
     }
 
@@ -192,5 +186,16 @@ public class Player : MonoBehaviour
         moveDirection.y = jumpVelocity;
         moveDirection = transform.TransformDirection(moveDirection);
         controller.Move(moveDirection * Time.deltaTime);
+    }
+
+    private void UpdatePlayerScore(int points)
+    {
+        score += points;
+        scoreText.text = score.ToString();
+    }
+
+    private void UpdatePlayerLives(int live)
+    {
+        _lives += live;
     }
 }

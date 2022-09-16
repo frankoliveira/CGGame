@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject anyObject;
-    public TMPro.TextMeshPro scoreText;
+    //Number of lives
+    [SerializeField] private int _lives;
+    private int _score;
 
     // Start is called before the first frame update
     void Start()
