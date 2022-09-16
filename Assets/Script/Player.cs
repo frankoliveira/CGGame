@@ -20,18 +20,34 @@ public class Player : MonoBehaviour
     private float rotation;
     private Vector3 moveDirection;
 
+    private int _vidas = 1;
+    [SerializeField] private MenuGameOverController _menuGameOverController;
+
     // Start is called before the first frame update
     void Start()
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         animator.SetInteger("transition", 0);
+        if(_menuGameOverController != null)
+        {
+            Debug.Log("menu game ok");
+        }
+        else
+        {
+            Debug.Log("menu game é null");
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         Move();
+        if (_vidas == 0)
+        {
+            _menuGameOverController.Setup(score);
+            _vidas = -1;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -39,12 +55,12 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag("Spikes"))
         {
             animator.SetInteger("transition", 2);
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
         if (collision.gameObject.CompareTag("Enemy2Legs"))
         {
             animator.SetInteger("transition", 2);
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
         if (collision.gameObject.CompareTag("Gear"))
         {
@@ -58,19 +74,15 @@ public class Player : MonoBehaviour
         if (other.gameObject.CompareTag("Spikes"))
         {
             animator.SetInteger("transition", 3);
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            _vidas -= 1;
         }
 
         if (other.gameObject.CompareTag("Enemy2Legs"))
         {
             animator.SetInteger("transition", 3);
             Destroy(gameObject);
-        }
-
-        if (other.gameObject.CompareTag("Spikes"))
-        {
-            animator.SetInteger("transition", 3);
-            Destroy(gameObject);
+            _vidas -= 1;
         }
 
         if (other.gameObject.CompareTag("Gear"))
