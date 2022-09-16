@@ -7,6 +7,7 @@ public class Player : MonoBehaviour
     private CharacterController controller;
     private Animator animator;
     public TMPro.TextMeshProUGUI scoreText;
+    public TMPro.TextMeshProUGUI lifeText;
 
     public float speed;
     public float gravity;
@@ -15,12 +16,12 @@ public class Player : MonoBehaviour
     public float jumpHeight;
     public float YRightRotation;
     public float YLeftRotation;
-    
+
     private int score;
     private float rotation;
     private Vector3 moveDirection;
 
-    private int _vidas = 1;
+    public int _vidas = 3;
     [SerializeField] private MenuGameOverController _menuGameOverController;
 
     // Start is called before the first frame update
@@ -43,12 +44,19 @@ public class Player : MonoBehaviour
     void Update()
     {
         Move();
+        
         if (_vidas == 0)
         {
-            _menuGameOverController.Setup(score);
+            _menuGameOverController.Setup(score, _vidas);
             _vidas = -1;
         }
+        
+        //Debug.Log(controller.height);
+        /* Estava tentando pegar a altura corrente do jogador para, se ela for menor do q 0, decrementar a vida,
+        pois ele caiu da plataforma, mas esse controller.height não muda conforme ele vai andando no jogo, então
+        acho q n é assim q pegamos o y atual */
     }
+
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -56,11 +64,13 @@ public class Player : MonoBehaviour
         {
             animator.SetInteger("transition", 2);
             //Destroy(gameObject);
+            lifeText.text = _vidas.ToString();
         }
         if (collision.gameObject.CompareTag("Enemy2Legs"))
         {
             animator.SetInteger("transition", 2);
             //Destroy(gameObject);
+            lifeText.text = _vidas.ToString();
         }
         if (collision.gameObject.CompareTag("Gear"))
         {
@@ -76,13 +86,17 @@ public class Player : MonoBehaviour
             animator.SetInteger("transition", 3);
             //Destroy(gameObject);
             _vidas -= 1;
+            Debug.Log("Colisão com spikes. Vidas - 1");
+            lifeText.text = _vidas.ToString();
         }
 
         if (other.gameObject.CompareTag("Enemy2Legs"))
         {
             animator.SetInteger("transition", 3);
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            Debug.Log("Colisão com Enemy2Legs. Vidas - 1");
             _vidas -= 1;
+            lifeText.text = _vidas.ToString();
         }
 
         if (other.gameObject.CompareTag("Gear"))
