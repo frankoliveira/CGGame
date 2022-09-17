@@ -17,9 +17,10 @@ public class Player : MonoBehaviour
     public float YRightRotation;
     public float YLeftRotation;
 
-    private int score;
+    private int score = 0;
     private float rotation;
     private Vector3 moveDirection;
+    private Vector3 lastPosition;
 
     public int _lives = 3;
     [SerializeField] private MenuGameOverController _menuGameOverController;
@@ -30,13 +31,15 @@ public class Player : MonoBehaviour
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         animator.SetInteger("transition", 0);
+        lifeText.text = _lives.ToString();
+        scoreText.text = score.ToString();
     }
 
     // Update is called once per frame
     void Update()
     {
         Move();
-        
+        Debug.Log(moveDirection);
         if (_lives == 0)
         {
             Destroy(gameObject);
@@ -44,10 +47,14 @@ public class Player : MonoBehaviour
             //_vidas = -1;
         }
         
-        //Debug.Log(controller.height);
-        /* Estava tentando pegar a altura corrente do jogador para, se ela for menor do q 0, decrementar a vida,
-        pois ele caiu da plataforma, mas esse controller.height não muda conforme ele vai andando no jogo, então
-        acho q n é assim q pegamos o y atual */
+        // Caiu
+        if(controller.transform.position.y < -10)
+        {
+            Debug.Log("Caímos");
+            UpdatePlayerLives(-1);
+            //SetPlayerPosition(new Vector3(24.23f, 13.83f, 0f)); //voltando para o início
+            SetPlayerPosition(lastPosition);
+        }
     }
 
     /*
@@ -73,24 +80,32 @@ public class Player : MonoBehaviour
     }
     */
 
+    private void SetPlayerPosition(Vector3 position)
+    {
+        controller.transform.position = position;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Spikes"))
         {
-            animator.SetInteger("transition", 3);
+            //animator.SetInteger("transition", 3);
             UpdatePlayerLives(-1);
-            //_lives -= 1;
             Debug.Log("Colisão com spikes. Vidas - 1");
-            lifeText.text = _lives.ToString();
         }
 
         if (other.gameObject.CompareTag("Enemy2Legs"))
         {
-            animator.SetInteger("transition", 3);
+            //animator.SetInteger("transition", 3);
             UpdatePlayerLives(-1);
-            //_lives -= 1;
             Debug.Log("Colisão com Enemy2Legs. Vidas - 1");
-            lifeText.text = _lives.ToString();
+        }
+        
+        if (other.gameObject.CompareTag("Projectile1"))
+        {
+            //animator.SetInteger("transition", 3);
+            UpdatePlayerLives(-1);
+            Debug.Log("Colisão com projétil. Vidas - 1");
         }
 
         if (other.gameObject.CompareTag("Gear"))
@@ -103,6 +118,7 @@ public class Player : MonoBehaviour
     {
         if (controller.isGrounded)
         {
+            lastPosition = controller.transform.position;
             animator.SetInteger("transition", 0);
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -197,5 +213,6 @@ public class Player : MonoBehaviour
     private void UpdatePlayerLives(int live)
     {
         _lives += live;
+        lifeText.text = _lives.ToString();
     }
 }
