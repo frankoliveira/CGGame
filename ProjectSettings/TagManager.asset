@@ -9,6 +9,8 @@ TagManager:
   - Gear
   - Projectile1
   - Portal
+  - EnemyHumanoide
+  - Key
   layers:
   - Default
   - TransparentFX

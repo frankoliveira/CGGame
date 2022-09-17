@@ -8,6 +8,9 @@ public class Player : MonoBehaviour
     private Animator animator;
     public TMPro.TextMeshProUGUI scoreText;
     public TMPro.TextMeshProUGUI lifeText;
+    public TMPro.TextMeshProUGUI auxiliarText;
+    public GameObject key;
+    public bool getKey = false;
 
     public float speed;
     public float gravity;
@@ -34,6 +37,7 @@ public class Player : MonoBehaviour
         animator.SetInteger("transition", 0);
         lifeText.text = _lives.ToString();
         scoreText.text = score.ToString();
+        key.SetActive(false);
     }
 
     // Update is called once per frame
@@ -45,7 +49,8 @@ public class Player : MonoBehaviour
             
             if (_lives <= 0)
             {
-                Destroy(gameObject);
+                gameObject.SetActive(false);
+                //Destroy(gameObject);
                 _menuGameOverController.Setup(score);
             }
             
@@ -102,6 +107,12 @@ public class Player : MonoBehaviour
             UpdatePlayerLives(-1);
             Debug.Log("Colisão com Enemy2Legs. Vidas - 1");
         }
+
+        if (other.gameObject.CompareTag("EnemyHumanoide"))
+        {
+            UpdatePlayerLives(-1);
+            Debug.Log("Colisão com EnemyHumanoide. Vidas - 1");
+        }
         
         if (other.gameObject.CompareTag("Projectile1"))
         {
@@ -114,11 +125,25 @@ public class Player : MonoBehaviour
             UpdatePlayerScore(1);
         }
 
+        if (other.gameObject.CompareTag("Key"))
+        {
+            getKey = true;
+            key.SetActive(true);
+        }
+
         if (other.gameObject.CompareTag("Portal"))
         {
-            _menuVictoryController.Setup(score);
-            //Destroy(gameObject);
-            gameObject.SetActive(false);
+            if(getKey)
+            {
+                _menuVictoryController.Setup(score);
+                //Destroy(gameObject);
+                gameObject.SetActive(false);
+            }
+            else
+            {
+                auxiliarText.text = "Vc ainda n tem a chave para o portal!";
+            }
+            
         }
     }
 
