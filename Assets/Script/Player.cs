@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
 
     public int _lives = 3;
     [SerializeField] private MenuGameOverController _menuGameOverController;
+    [SerializeField] private MenuVictoryController _menuVictoryController;
 
     // Start is called before the first frame update
     void Start()
@@ -38,22 +39,24 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Move();
-        Debug.Log(moveDirection);
-        if (_lives == 0)
+        if(gameObject != null)
         {
-            Destroy(gameObject);
-            _menuGameOverController.Setup(score, _lives);
-            //_vidas = -1;
-        }
-        
-        // Caiu
-        if(controller.transform.position.y < -10)
-        {
-            Debug.Log("Caímos");
-            UpdatePlayerLives(-1);
-            //SetPlayerPosition(new Vector3(24.23f, 13.83f, 0f)); //voltando para o início
-            SetPlayerPosition(lastPosition);
+            Move();
+            
+            if (_lives <= 0)
+            {
+                Destroy(gameObject);
+                _menuGameOverController.Setup(score);
+            }
+            
+            // Caiu
+            if(controller.transform.position.y < -10)
+            {
+                Debug.Log("Caímos");
+                UpdatePlayerLives(-1);
+                SetPlayerPosition(new Vector3(24.23f, 13.83f, 0f)); //voltando para o início
+                //SetPlayerPosition(lastPosition);
+            }
         }
     }
 
@@ -96,14 +99,12 @@ public class Player : MonoBehaviour
 
         if (other.gameObject.CompareTag("Enemy2Legs"))
         {
-            //animator.SetInteger("transition", 3);
             UpdatePlayerLives(-1);
             Debug.Log("Colisão com Enemy2Legs. Vidas - 1");
         }
         
         if (other.gameObject.CompareTag("Projectile1"))
         {
-            //animator.SetInteger("transition", 3);
             UpdatePlayerLives(-1);
             Debug.Log("Colisão com projétil. Vidas - 1");
         }
@@ -111,6 +112,13 @@ public class Player : MonoBehaviour
         if (other.gameObject.CompareTag("Gear"))
         {
             UpdatePlayerScore(1);
+        }
+
+        if (other.gameObject.CompareTag("Portal"))
+        {
+            _menuVictoryController.Setup(score);
+            //Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 
@@ -132,7 +140,6 @@ public class Player : MonoBehaviour
             {
                 animator.SetInteger("transition", 1);
                 moveDirection = Vector3.forward * speed;
-
             }
 
             if (Input.GetKeyUp(KeyCode.D))
@@ -146,7 +153,6 @@ public class Player : MonoBehaviour
             {
                 animator.SetInteger("transition", 1);
                 moveDirection = Vector3.forward * speed;
-
             }
 
             if (Input.GetKeyUp(KeyCode.A))
@@ -213,6 +219,9 @@ public class Player : MonoBehaviour
     private void UpdatePlayerLives(int live)
     {
         _lives += live;
-        lifeText.text = _lives.ToString();
+        if(_lives >= 0)
+        {
+            lifeText.text = _lives.ToString();
+        }
     }
 }

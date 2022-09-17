@@ -8,6 +8,7 @@ TagManager:
   - Enemy2Legs
   - Gear
   - Projectile1
+  - Portal
   layers:
   - Default
   - TransparentFX

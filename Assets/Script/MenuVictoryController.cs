@@ -3,26 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuGameOverController : MonoBehaviour
+public class MenuVictoryController : MonoBehaviour
 {
     public TMPro.TextMeshProUGUI pointsText;
     public TMPro.TextMeshProUGUI lifeText;
     [SerializeField] private string nameOfGameLevel;
-    [SerializeField] private GameObject menuGameOver;
+    [SerializeField] private GameObject menuVictory;
 
     public void Setup(int score)
     {
         //gameObject.SetActive(true);
         Debug.Log("Setup");
-        menuGameOver.SetActive(true);
+        menuVictory.SetActive(true);
         pointsText.text += score.ToString();
         //lifeText.text += vidas.ToString();
     }
 
-    public void Restart()
+    /*public void Restart()
     {
         SceneManager.LoadScene(nameOfGameLevel);
-    }
+    }*/
 
     public void MainMenu()
     {
