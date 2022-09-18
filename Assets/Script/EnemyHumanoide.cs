@@ -16,13 +16,6 @@ public class EnemyHumanoide : MonoBehaviour
     private float _leftLimiteX;
     private float _rightLimiteX;
     private Vector3 _moveDirection;
-
-    //Shooting properties
-    //private Transform _playerTransform;
-    //private Enemy_HumanoideController _currentGun;
-    //private float _fireRate;
-    //private float _fireRateDelta = 0f;
-    //[SerializeField] float _playerRange = 13.0f;
     
     void Start()
     {
@@ -30,25 +23,11 @@ public class EnemyHumanoide : MonoBehaviour
         _animator = GetComponent<Animator>();
         _leftLimiteX = _controller.transform.position.x - lefttWalkDistance;
         _rightLimiteX = _controller.transform.position.x + rightWalkDistance;
-        //_playerTransform = FindObjectOfType<Player>().transform;
-        //_currentGun = GetComponentInChildren<Enemy_HumanoideController>();
-        //_fireRate = _currentGun.getRateOfFire();
     }
 
     void Update()
     {
         Move();
-        //Vector3 playerGroundPos = new Vector3(_playerTransform.position.x, transform.position.y, _playerTransform.position.z);
-        //_fireRateDelta -= Time.deltaTime;
-
-        /*if(_fireRateDelta < 0)
-        {
-            if (Vector3.Distance(transform.position, playerGroundPos) < _playerRange)
-            {
-                _currentGun.Shoot();
-                _fireRateDelta = _fireRate;
-            }
-        }*/
     }
 
     void Move()
@@ -82,5 +61,13 @@ public class EnemyHumanoide : MonoBehaviour
         }
 
         _controller.Move(_moveDirection * Time.deltaTime);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Projectile2"))
+        {
+            Destroy(gameObject);
+        }
     }
 }

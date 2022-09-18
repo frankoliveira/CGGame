@@ -29,6 +29,14 @@ public class Player : MonoBehaviour
     [SerializeField] private MenuGameOverController _menuGameOverController;
     [SerializeField] private MenuVictoryController _menuVictoryController;
 
+    //Shooting properties
+    //private Transform _playerTransform;
+    private GunPlayerController _currentGun;
+    private float _fireRate;
+    private float _fireRateDelta = 0f;
+    //[SerializeField] float _playerRange = 13.0f;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,6 +46,8 @@ public class Player : MonoBehaviour
         lifeText.text = _lives.ToString();
         scoreText.text = score.ToString();
         key.SetActive(false);
+        _currentGun = GetComponentInChildren<GunPlayerController>();
+        _fireRate = _currentGun.getRateOfFire();
     }
 
     // Update is called once per frame
@@ -46,6 +56,7 @@ public class Player : MonoBehaviour
         if(gameObject != null)
         {
             Move();
+            Shoot();
             
             if (_lives <= 0)
             {
@@ -151,7 +162,7 @@ public class Player : MonoBehaviour
     {
         if (controller.isGrounded)
         {
-            lastPosition = controller.transform.position;
+            //lastPosition = controller.transform.position;
             animator.SetInteger("transition", 0);
 
             if (Input.GetKeyDown(KeyCode.Space))
@@ -233,6 +244,30 @@ public class Player : MonoBehaviour
         moveDirection.y = jumpVelocity;
         moveDirection = transform.TransformDirection(moveDirection);
         controller.Move(moveDirection * Time.deltaTime);
+    }
+
+    void Shoot()
+    {
+        if (Input.GetKey(KeyCode.F))
+        {
+            //animator.SetInteger("transition", 1);
+        
+            //Shooting Part
+            _fireRateDelta -= Time.deltaTime;
+
+            if(_fireRateDelta < 0)
+            {
+                _currentGun.Shoot();
+                _fireRateDelta = _fireRate;
+            }
+            // End of Shooting Part
+        }
+
+        if (Input.GetKeyUp(KeyCode.F))
+        {
+            animator.SetInteger("transition", 0);
+            //moveDirection = Vector3.zero;
+        }
     }
 
     private void UpdatePlayerScore(int points)

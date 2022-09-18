@@ -83,4 +83,12 @@ public class Enemy2Legs : MonoBehaviour
 
         _controller.Move(_moveDirection * Time.deltaTime);
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Projectile2"))
+        {
+            Destroy(gameObject);
+        }
+    }
 }
