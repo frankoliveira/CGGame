@@ -9,7 +9,8 @@ public class Player : MonoBehaviour
     public TMPro.TextMeshProUGUI scoreText;
     public TMPro.TextMeshProUGUI lifeText;
     public TMPro.TextMeshProUGUI auxiliarText;
-    public GameObject key;
+    public GameObject keyText;
+    public GameObject keyObject;
     public bool getKey = false;
 
     public float speed;
@@ -45,7 +46,7 @@ public class Player : MonoBehaviour
         animator.SetInteger("transition", 0);
         lifeText.text = _lives.ToString();
         scoreText.text = score.ToString();
-        key.SetActive(false);
+        keyText.SetActive(false);
         _currentGun = GetComponentInChildren<GunPlayerController>();
         _fireRate = _currentGun.getRateOfFire();
     }
@@ -68,36 +69,12 @@ public class Player : MonoBehaviour
             // Caiu
             if(controller.transform.position.y < -10)
             {
-                Debug.Log("Caímos");
                 UpdatePlayerLives(-1);
                 SetPlayerPosition(new Vector3(24.23f, 13.83f, 0f)); //voltando para o início
                 //SetPlayerPosition(lastPosition);
             }
         }
     }
-
-    /*
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Spikes"))
-        {
-            animator.SetInteger("transition", 2);
-            //Destroy(gameObject);
-            lifeText.text = _vidas.ToString();
-        }
-        if (collision.gameObject.CompareTag("Enemy2Legs"))
-        {
-            animator.SetInteger("transition", 2);
-            //Destroy(gameObject);
-            lifeText.text = _vidas.ToString();
-        }
-        if (collision.gameObject.CompareTag("Gear"))
-        {
-            score++;
-            scoreText.text = score.ToString();
-        }
-    }
-    */
 
     private void SetPlayerPosition(Vector3 position)
     {
@@ -108,27 +85,27 @@ public class Player : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Spikes"))
         {
-            //animator.SetInteger("transition", 3);
             UpdatePlayerLives(-1);
-            Debug.Log("Colisão com spikes. Vidas - 1");
         }
 
         if (other.gameObject.CompareTag("Enemy2Legs"))
         {
             UpdatePlayerLives(-1);
-            Debug.Log("Colisão com Enemy2Legs. Vidas - 1");
         }
 
         if (other.gameObject.CompareTag("EnemyHumanoide"))
         {
             UpdatePlayerLives(-1);
-            Debug.Log("Colisão com EnemyHumanoide. Vidas - 1");
         }
-        
+
+        if (other.gameObject.CompareTag("EnemyLargeGun"))
+        {
+            UpdatePlayerLives(-1);
+        }
+
         if (other.gameObject.CompareTag("Projectile1"))
         {
             UpdatePlayerLives(-1);
-            Debug.Log("Colisão com projétil. Vidas - 1");
         }
 
         if (other.gameObject.CompareTag("Gear"))
@@ -139,7 +116,8 @@ public class Player : MonoBehaviour
         if (other.gameObject.CompareTag("Key"))
         {
             getKey = true;
-            key.SetActive(true);
+            keyObject.SetActive(false);
+            auxiliarText.text = "Use a chave no portal!";
         }
 
         if (other.gameObject.CompareTag("Portal"))
@@ -147,14 +125,19 @@ public class Player : MonoBehaviour
             if(getKey)
             {
                 _menuVictoryController.Setup(score);
-                //Destroy(gameObject);
                 gameObject.SetActive(false);
             }
             else
             {
-                auxiliarText.text = "Vc ainda n tem a chave para o portal!";
+                auxiliarText.text = "Pegue a chave!";
             }
             
+        }
+
+        if (other.gameObject.CompareTag("Life"))
+        {
+            UpdatePlayerLives(1);
+            other.gameObject.SetActive(false);
         }
     }
 
@@ -250,8 +233,6 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.F))
         {
-            //animator.SetInteger("transition", 1);
-        
             //Shooting Part
             _fireRateDelta -= Time.deltaTime;
 

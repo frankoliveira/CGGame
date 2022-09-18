@@ -11,6 +11,9 @@ TagManager:
   - Portal
   - EnemyHumanoide
   - Key
+  - Projectile2
+  - EnemyLargeGun
+  - Life
   layers:
   - Default
   - TransparentFX
