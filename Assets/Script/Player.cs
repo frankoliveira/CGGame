@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
     public GameObject keyObject;
     public bool getKey = false;
 
+    public float auxiliarTextTime = 1.5f;
+    public bool auxiliarTextDisplayed = false;
     public float speed;
     public float gravity;
     public float rotSpeed;
@@ -74,6 +76,18 @@ public class Player : MonoBehaviour
                 //SetPlayerPosition(lastPosition);
             }
         }
+        // estamos mostrando auxiliarText
+        if(auxiliarTextDisplayed == true)
+        {
+            auxiliarTextTime -= Time.deltaTime;
+
+            if(auxiliarTextTime <= 0)
+            {
+                auxiliarText.text = "";
+                auxiliarTextTime = 1.5f;
+                auxiliarTextDisplayed = false;
+            }
+        }
     }
 
     private void SetPlayerPosition(Vector3 position)
@@ -118,6 +132,7 @@ public class Player : MonoBehaviour
             getKey = true;
             keyObject.SetActive(false);
             auxiliarText.text = "Use a chave no portal!";
+            auxiliarTextDisplayed = true;
         }
 
         if (other.gameObject.CompareTag("Portal"))
@@ -130,6 +145,7 @@ public class Player : MonoBehaviour
             else
             {
                 auxiliarText.text = "Pegue a chave!";
+                auxiliarTextDisplayed = true;
             }
             
         }
