@@ -7,22 +7,30 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField] private string nameOfGameLevel;
     [SerializeField] private GameObject mainMenuPanel;
-    [SerializeField] private GameObject optionsMenuPanel;
+    [SerializeField] private GameObject instructionsMenuPanel;
+    [SerializeField] private GameObject aboutMenuPanel;
 
     public void Play()
     {
         SceneManager.LoadScene(nameOfGameLevel);
     }
 
-    public void Options()
+    public void About()
     {
         mainMenuPanel.SetActive(false);
-        optionsMenuPanel.SetActive(true);
+        aboutMenuPanel.SetActive(true);
+    }
+
+    public void Instructions()
+    {
+        mainMenuPanel.SetActive(false);
+        instructionsMenuPanel.SetActive(true);
     }
 
     public void CloseOptions()
     {
-        optionsMenuPanel.SetActive(false);
+        instructionsMenuPanel.SetActive(false);
+        aboutMenuPanel.SetActive(false);
         mainMenuPanel.SetActive(true);
     }
 
